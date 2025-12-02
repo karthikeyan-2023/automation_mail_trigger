@@ -1,0 +1,202 @@
+{
+  "name": "Mail Trigger",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -16
+      ],
+      "id": "0eea5815-c067-487e-94d3-4ef94ef776d2",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "sendTo": "=theaidude12@gmail.com",
+        "subject": "Your Seat is Confirmed – AI-Powered Digital Marketing Workshop",
+        "message": "=",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        752,
+        96
+      ],
+      "id": "982ae5e4-790b-4ee2-870f-20afaadf9e35",
+      "name": "Send a message",
+      "webhookId": "f835d834-0f44-4d3d-8258-a7984ee40c62",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "KHwKkuJJKerTHb93",
+          "name": "Academy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "13-Sh1VYR2cyYFdrIPSIwu8oZhs7-nBV9eJqxdLeHOV0",
+          "mode": "list",
+          "cachedResultName": "mail",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": ""
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        64,
+        0
+      ],
+      "id": "20cf1aae-dc16-4a17-8523-5bc7416a9b95",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "qaeooqohTzLEYYlF",
+          "name": "Academy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        272,
+        0
+      ],
+      "id": "e1b39e42-0f76-4ab7-9be6-be5a3f90c39f",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "amount": 2,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        96
+      ],
+      "id": "2103921e-c7d8-452f-819f-1b50e55d1ee7",
+      "name": "Wait",
+      "webhookId": "33f48562-40cd-4b65-87ee-fb92c36f9d94"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -224,
+        192
+      ],
+      "id": "a95d2bab-4901-4184-bb39-0a665bb2860c",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "efeddea0-3c89-4763-adda-30a4b1577ff3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "db679ddfba2bebd855c9cc0f7a1082efc502bd3da70696d5a936b05f3034c9a3"
+  },
+  "id": "DFzqUoJsyTCJEAzQ",
+  "tags": []
+}
